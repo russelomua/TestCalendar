@@ -1,0 +1,54 @@
+.head-title {
+	color: #757575;
+}
+
+.body {
+	height: 100vh;
+	padding: 70px 0 20px;
+}
+
+.calendar {
+	display: flex;
+	height: 100%;
+	border-left: 10px solid #dddddd;
+	flex-flow: row wrap;
+	align-items: stretch;
+	align-content: stretch;
+	justify-content: flex-start;
+}
+
+.calendar > div {
+	flex-basis: 14.285714%;
+	color: #212121;
+	border: 1px solid #e0e0e0;
+	padding: 10px;
+	
+}
+
+.calendar > div > .day {
+	display: inline-block;
+	background-color: #fff;
+	line-height: 25px;
+	width: 25px;
+	text-align: center;
+	padding: 0px;
+	border-radius: 50%;
+}
+
+.calendar > .today {
+	background-color: #f5f5f5;
+}
+
+.calendar > .today > .day {
+	background-color: #4285f4;
+	color: #fff;
+}
+
+.calendar > .gray {
+	color: #757575;
+}
+
+.calendar .week-day {
+	color: #757575;
+	display: block;
+}

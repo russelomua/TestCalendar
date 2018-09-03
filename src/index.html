@@ -1,0 +1,66 @@
+<!doctype html>
+<html  ng-app="atlanaCalendar">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Atlana Calendar - test work</title>
+
+	<link href="/css/app.css" rel="stylesheet" type="text/css">
+
+	<link rel="icon" href="/img/favicon/default.ico" type="image/x-icon">
+
+	<script src="/js/lib.js"></script>
+	<script src="/js/app.js"></script>
+</head>
+<body ng-controller="AppController as app">
+	<nav class="navbar navbar-default navbar-fixed-top">
+		<div class="container">
+			
+			<div class="navbar-form navbar-left">
+				<div class="form-group">
+					<button type="button" class="btn btn-default">Сегодня</button>
+					<a class="btn btn-default" ng-click="app.changeMonth(0)"><i class="glyphicon glyphicon-chevron-left"></i></a>
+					<a class="btn btn-default" ng-click="app.changeMonth(1)"><i class="glyphicon glyphicon-chevron-right"></i></a>
+				</div>
+			</div>
+			<a class="navbar-brand">{{app.currentDate | date:"LLLL yyyy"}}</a>
+			
+			<div class="navbar-form navbar-right">
+				<div class="form-group">
+					<input type="text" class="form-control" placeholder="Search">
+					<button type="submit" class="btn btn-primary">Submit</button>
+				</div>
+			</div>
+			
+			<div class="navbar-form navbar-right">
+				<div class="form-group">
+					<button type="button" class="btn btn-primary">Добавить</button>
+					<button type="button" class="btn btn-primary" ng-click="app.fillMonth()">Обновить</button>
+				</div>
+			</div>
+			
+			
+		</div>
+	</nav>
+		
+	<div class="container body">
+		<div class="calendar">
+			<div ng-class="{'today': (app.isToday(i)), 'gray': (app.isMonth(i))}" ng-repeat="i in app.days">
+				<span class="week-day" ng-if="$index<7">{{i | date: 'EEE'}}</span>
+				<span class="day">{{i | date: 'dd'}}</span>
+				<span ng-if="app.isFirst(i)">{{i | date: 'MMM'}}</span>
+			</div>
+		</div>
+	</div>
+<!--
+	<div class="head">
+		<button class="btn btn-default">Сегодня</button>
+		<button class="btn btn-default"> < </button>
+		<button class="btn btn-default"> > </button>
+		<span>Май 2019</span>
+	</div>
+-->
+	
+	
+</body>
+</html>

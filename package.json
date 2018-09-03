@@ -1,0 +1,25 @@
+{
+  "name": "atlana-calendar",
+  "version": "1.0.0",
+  "description": "Test work for atlana company",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "serve": "node node_modules/gulp/bin/gulp.js",
+    "clean": "node node_modules/gulp/bin/gulp.js clean",
+    "build": "node node_modules/gulp/bin/gulp.js build"
+  },
+  "author": "Nikolay Klyashtornyy",
+  "license": "ISC",
+  "devDependencies": {
+    "angular": "^1.7.3",
+    "angular-i18n": "^1.7.3",
+    "angular-ui-bootstrap": "^2.5.6",
+    "bootstrap": "^3.3.7",
+    "gulp": "^4.0.0",
+    "gulp-concat": "^2.6.1",
+    "gulp-connect": "^5.6.1",
+    "gulp-watch": "^5.0.1",
+    "rimraf": "^2.6.2"
+  }
+}
