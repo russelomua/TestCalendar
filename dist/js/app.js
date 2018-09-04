@@ -1,95 +1,132 @@
 angular.module('atlanaCalendar', [
-    'ui.bootstrap'
+    'ui.bootstrap',
+	'ngStorage'
 ]);
 
-AppController = function() {
-	obj = this;
+AppController = function($scope, $localStorage, $uibModal) {
+	app = this;
 	
-	obj.tasks = [
-		{
-			date: new Date(),
-			name:'123'
+	app.tasks = [];
+	
+	app.init = function() {
+		$scope.$watch("app.currentDate", function() {
+			app.fillMonth();
+		}, true);
+		
+		app.setToday();
+		
+		
+		tasks = [];
+		
+		tasks[1537218000000] = [{
+			time: '16:33',
+			title: 'My new event 1',
+			description: '123123'
 		},
 		{
-			date: new Date(),
-			name:'123'
+			title: 'My new event 3',
+			description: '123123'
 		}
-	]
+		];
+		tasks[1537304400000] = [{
+			title: 'My new event 2',
+			description: '123123'
+		}];
+
+		app.tasks = $localStorage.$default(tasks);
+	};
 	
-	obj.date = new Date();
-	obj.date.setHours(0,0,0,0);
+	app.currentMonth = function() {
+		return app.currentDate.getMonth();
+	};
+//	app.currentYear = function() {
+//		return app.currentDate.getFullYear();
+//	};
 	
-	obj.currentMonth = obj.date.getMonth();
-	obj.currentYear = obj.date.getFullYear();
-	obj.currentDate = new Date(obj.currentYear, obj.currentMonth);
-	
-	
-	obj.currentDay = function (date) {
+	app.currentDay = function (date) {
 		weekDay = date.getDay();
 		return ( weekDay == 0 ? 6 : weekDay-1 );
-	}
+	};
 	
-	obj.fillMonth = function () {
-		obj.currentDate = new Date(obj.currentYear, obj.currentMonth);
-		obj.days = [];
-		day = new Date(obj.currentYear, obj.currentMonth);
+	app.fillMonth = function () {
+		app.days = {};
+		day = new Date(app.currentDate);
 		
-		//generate before
-		index = obj.currentDay(day);
+		//before part
+		index = app.currentDay(day);
 		for (i = 0;i<index; i++) {
 			day.setDate(day.getDate() - 1);
-			
-			obj.days.unshift(day.getTime());
+			app.insertDays(day.getTime());
 		}
-		
-		day = new Date(obj.currentYear, obj.currentMonth);
-		
-		while (day.getMonth() == obj.currentMonth) {
-
-			obj.days.push(day.getTime());
-			
+		//middle part
+		day = new Date(app.currentDate);
+		while (day.getMonth() == app.currentMonth()) {
+			app.insertDays(day.getTime());
 			day.setDate(day.getDate() + 1);
 		}
-		
-		
-		index = obj.currentDay(day);
+		//after part
+		index = app.currentDay(day);
 		if (index > 0)
 			for (i=index;i<=6; i++) {
-				obj.days.push(day.getTime());
-
+				app.insertDays(day.getTime());
 				day.setDate(day.getDate() + 1);
 			}
-		
+	};
+	
+	app.insertDays = function (index) {
+		app.days[index] = (typeof app.tasks[index] == 'undefined' ? [] : app.tasks[index]);
 	}
 	
-	obj.changeMonth = function(dirrection) {
-		obj.currentMonth = (dirrection > 0 ? obj.currentMonth+1 : obj.currentMonth-1 );
-		obj.fillMonth();
-	}
+	app.setMonth = function(dirrection) {
+		app.currentDate.setMonth( app.currentDate.getMonth() + (dirrection > 0 ? 1 : -1 ) );
+	};
 	
-	obj.isToday = function(time) {
-		day = new Date(time);
-		return (day.toDateString() == obj.date.toDateString());
-	}
+	app.setToday = function() {
+		today = new Date();
+		app.currentDate = new Date(today.getFullYear(), today.getMonth());
+	};
 	
-	obj.isFirst = function(time) {
-		day = new Date(time);
+	app.isToday = function(time) {
+		day = new Date(time*1);
+		today = new Date();
+		return (day.toDateString() == today.toDateString());
+	};
+	
+	app.isFirst = function(time) {
+		day = new Date(time*1);
 		return (day.getDate() == 1);
+	};
+	
+	app.isMonth = function(time) {
+		day = new Date(time*1);
+		return (day.getMonth() != app.currentMonth());
+	};
+	
+	///-----
+	
+	app.modalAdd = function () {
+		console.log('add');
+		$uibModal.open({
+			animation: true,
+			ariaLabelledBy: 'modal-title-bottom',
+			ariaDescribedBy: 'modal-body-bottom',
+			templateUrl: 'tpls/modalAdd.html',
+			size: 'md',
+			controller: function($scope) {
+				$scope.name = 'bottom';  
+			},
+			controllerAs: "modalAdd"
+		}).result.then(function (data) {
+			console.log(data)
+		});
 	}
 	
-	obj.isMonth = function(time) {
-		day = new Date(time);
-		return (day.getMonth() != obj.currentMonth);
-	}
-	
-	obj.days = [];
-	//check weekDay of 1th
-	
-	obj.fillMonth();
+	///-----
+	app.init();
 };
 
-////injection of dependencies
-//AppController.$inject=[];
+//injection of dependencies
+AppController.$inject=["$scope", "$localStorage", "$uibModal"];
 
 //Register main app controller function
 angular.module('atlanaCalendar').controller('AppController', AppController);

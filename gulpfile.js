@@ -11,29 +11,33 @@ var path = {
 		base: "dist/",
 		js: "dist/js/",
 		css: "dist/css/",
-		fonts: "dist/fonts/"
+		fonts: "dist/fonts/",
+		tpls: "dist/tpls/"
 	},
 	src: {
 		html: "src/index.html",
+		tpls: 'src/tpls/**/*.html',
 		js: [
 			"src/js/app.js"
 		],
 		css: [
 			"src/css/app.css",
-			'node_modules/bootstrap/dist/css/bootstrap.css'
+			"node_modules/bootstrap/dist/css/bootstrap.css"
 		],
 		lib: [
 			"node_modules/angular/angular.min.js",
 			"node_modules/angular-ui-bootstrap/dist/ui-bootstrap.js",
 			"node_modules/angular-ui-bootstrap/dist/ui-bootstrap-tpls.js",
-			"node_modules/angular-i18n/angular-locale_ru-ua.js"
+			"node_modules/angular-i18n/angular-locale_ru-ua.js",
+			"node_modules/ngstorage/ngStorage.min.js"
 		],
 		fonts: "node_modules/bootstrap/dist/fonts/*"
 	},
 	watch: { //Тут мы укажем, за изменением каких файлов мы хотим наблюдать
 		html: 'src/index.html',
+		tpls: 'src/tpls/**/*.html',
 		js: 'src/**/*.js',
-		css: 'src/css/**/*.+(css)'
+		css: 'src/css/**/*.css'
     },
     clean: 'dist'
 }
@@ -66,6 +70,12 @@ gulp.task('html', function () {
         .pipe(connect.reload()); //server reload
 });
 
+gulp.task('tpls', function () {
+    return gulp.src(path.src.tpls)
+        .pipe(gulp.dest(path.build.tpls))
+        .pipe(connect.reload()); //server reload
+});
+
 gulp.task('fonts', function () {
     return gulp.src(path.src.fonts)
         .pipe(gulp.dest(path.build.fonts))
@@ -74,6 +84,7 @@ gulp.task('fonts', function () {
 
 gulp.task('watch', function(){
 	gulp.watch(path.watch.html, gulp.parallel('html'));
+	gulp.watch(path.watch.tpls, gulp.parallel('tpls'));
 	gulp.watch(path.watch.js, gulp.parallel('js'));
 	gulp.watch(path.watch.css, gulp.parallel('css'));
 });
@@ -92,6 +103,6 @@ gulp.task('connect', function () {
 	});
 });
 
-gulp.task('build', gulp.series(['lib', 'js', 'css', 'html', 'fonts' ]));
+gulp.task('build', gulp.series(['lib', 'js', 'css', 'html', 'fonts', 'tpls' ]));
 
 gulp.task('default', gulp.parallel(['build', 'connect', 'watch']));

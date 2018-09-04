@@ -16,9 +16,9 @@
 			
 			<div class="navbar-form navbar-left">
 				<div class="form-group">
-					<button type="button" class="btn btn-default">Сегодня</button>
-					<a class="btn btn-default" ng-click="app.changeMonth(0)"><i class="glyphicon glyphicon-chevron-left"></i></a>
-					<a class="btn btn-default" ng-click="app.changeMonth(1)"><i class="glyphicon glyphicon-chevron-right"></i></a>
+					<button type="button" class="btn btn-default" ng-click="app.setToday()">Сегодня</button>
+					<button type="button" class="btn btn-default" ng-click="app.setMonth(0)"><i class="glyphicon glyphicon-chevron-left"></i></button>
+					<button type="button" class="btn btn-default" ng-click="app.setMonth(1)"><i class="glyphicon glyphicon-chevron-right"></i></button>
 				</div>
 			</div>
 			<a class="navbar-brand">{{app.currentDate | date:"LLLL yyyy"}}</a>
@@ -32,7 +32,7 @@
 			
 			<div class="navbar-form navbar-right">
 				<div class="form-group">
-					<button type="button" class="btn btn-primary">Добавить</button>
+					<button type="button" class="btn btn-primary" ng-click="app.modalAdd()">Добавить</button>
 					<button type="button" class="btn btn-primary" ng-click="app.fillMonth()">Обновить</button>
 				</div>
 			</div>
@@ -43,22 +43,19 @@
 		
 	<div class="container body">
 		<div class="calendar">
-			<div ng-class="{'today': (app.isToday(i)), 'gray': (app.isMonth(i))}" ng-repeat="i in app.days">
-				<span class="week-day" ng-if="$index<7">{{i | date: 'EEE'}}</span>
+			<div ng-class="{'today': (app.isToday(i)), 'gray': (app.isMonth(i))}" ng-repeat="(i, events) in app.days">
+				<span class="week-day" ng-show="$index<7">{{i | date: 'EEE'}}</span>
 				<span class="day">{{i | date: 'dd'}}</span>
-				<span ng-if="app.isFirst(i)">{{i | date: 'MMM'}}</span>
+				<span ng-show="app.isFirst(i)">{{i | date: 'MMM'}}</span>
+				<div class="events">
+					<div ng-class="{'event-full': (!event.time), 'event-time': (event.time)}" ng-repeat="event in events">
+						<span ng-show="event.time">{{event.time}}</span>
+						<strong>{{event.title}}</strong>
+					</div>
+				</div>
 			</div>
 		</div>
 	</div>
-<!--
-	<div class="head">
-		<button class="btn btn-default">Сегодня</button>
-		<button class="btn btn-default"> < </button>
-		<button class="btn btn-default"> > </button>
-		<span>Май 2019</span>
-	</div>
--->
-	
 	
 </body>
 </html>

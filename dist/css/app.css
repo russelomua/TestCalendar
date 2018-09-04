@@ -11,7 +11,7 @@
 	display: flex;
 	height: 100%;
 	border-left: 10px solid #dddddd;
-	flex-flow: row wrap;
+	flex-wrap: wrap;
 	align-items: stretch;
 	align-content: stretch;
 	justify-content: flex-start;
@@ -22,17 +22,25 @@
 	color: #212121;
 	border: 1px solid #e0e0e0;
 	padding: 10px;
-	
+	min-height: 10%;
+}
+
+.calendar > div > span {
+	display: inline-block;
+	line-height: 24px;
 }
 
 .calendar > div > .day {
-	display: inline-block;
-	background-color: #fff;
-	line-height: 25px;
+	width: 24px;
+	text-align: center;
+	border-radius: 50%;
+}
+
+.calendar .week-day {
 	width: 25px;
 	text-align: center;
-	padding: 0px;
-	border-radius: 50%;
+	color: #757575;
+	display: block;
 }
 
 .calendar > .today {
@@ -48,9 +56,31 @@
 	color: #757575;
 }
 
-.calendar .week-day {
-	color: #757575;
-	display: block;
+.calendar .events {
+	margin: 0 -8px;
+	font-size: 12px;
+	padding: 10px 0;
+}
+
+.calendar .events > div {
+	padding: 0 10px;
+	line-height: 24px;
+	cursor: pointer;
+}
+
+.calendar .events > .event-full {
+	background-color: #039be5;
+	border-radius: 2px;
+	color: #fff;
+}
+
+.calendar .events > .event-time::before {
+	content: "";
+	display: inline-block;
+	width: 8px;
+	height: 8px;
+	border-radius: 50%;
+	background-color: #039be5;
 }
 /*!
  * Bootstrap v3.3.7 (http://getbootstrap.com)
