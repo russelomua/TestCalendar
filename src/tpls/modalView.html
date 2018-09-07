@@ -3,7 +3,7 @@
 </div>
 <div class="modal-body" id="modal-body">
 	<div ng-hide="modalView.edit">
-		<p class="text-muted">{{modalView.data.date | date:'dd MMMM yyyy'}} в <strong>{{modalView.data.time | date:'HH:mm'}}</strong></p>
+		<p class="text-muted">{{modalView.data.date | date:'dd MMMM yyyy'}} <span ng-show="modalView.data.time">в <strong>{{modalView.data.time | date:'HH:mm'}}</strong></span></p>
 		<p>{{modalView.data.description}}</p>
 	</div>
 	
