@@ -12,45 +12,78 @@
 </head>
 <body ng-controller="AppController as app">
 	<nav class="navbar navbar-default navbar-fixed-top">
-		<div class="container">
+		<div class="container-fluid">
 			
 			<div class="navbar-form navbar-left">
 				<div class="form-group">
-					<button type="button" class="btn btn-default" ng-click="app.setToday()">Сегодня</button>
-					<button type="button" class="btn btn-default" ng-click="app.setMonth(0)"><i class="glyphicon glyphicon-chevron-left"></i></button>
-					<button type="button" class="btn btn-default" ng-click="app.setMonth(1)"><i class="glyphicon glyphicon-chevron-right"></i></button>
+					<button type="button" class="btn btn-default" ng-click="app.setToday()">
+						<i class="glyphicon glyphicon-calendar"></i>
+						<span class="hidden-xs hidden-sm">Сегодня</span>
+					</button>
+					<button type="button" class="btn btn-default btn-sm" ng-click="app.setMonth(0)"><i class="glyphicon glyphicon-chevron-left"></i></button>
+					<button type="button" class="btn btn-default btn-sm" ng-click="app.setMonth(1)"><i class="glyphicon glyphicon-chevron-right"></i></button>
 				</div>
 			</div>
-			<a class="navbar-brand">{{app.currentDate | date:"LLLL yyyy"}}</a>
 			
+			<span class="navbar-brand hidden-xs">{{app.currentDate | date:"LLLL yyyy"}}</span>
+			<span class="navbar-brand visible-xs-inline">{{app.currentDate | date:"MMM yy"}}</span>
+
 			<div class="navbar-form navbar-right">
 				<div class="form-group">
-					<input type="text" class="form-control" placeholder="Search">
-					<button type="submit" class="btn btn-primary">Submit</button>
+					<div class="" uib-dropdown on-toggle="app.doSearch(open)" is-open="app.searchOpen">
+						<input type="text" ng-model="app.search" class="form-control hidden-xs" placeholder="Событие или описание" uib-dropdown-toggle>
+						
+						<button type="button" class="btn btn-default visible-xs" ng-click="app.focusSearch($event)">
+							<i class="glyphicon glyphicon-search"></i>
+						</button>
+						<ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="single-button">
+							<li class="visible-xs">
+								<input type="text" ng-model="app.search" id="dropdownSearch" class="form-control" placeholder="Событие или описание">
+							</li>
+							<li ng-show="app.search.length < app.cfg.searchMinLength"><a>Для поиска введите минимум {{app.cfg.searchMinLength}} символа</a></li>
+							<li ng-show="app.doSearch().length == 0 && app.search.length >= app.cfg.searchMinLength"><a>Ничего не найдено</a></li>
+							<li>
+								<a class="list-group-item" ng-repeat="search in app.doSearch()" ng-click="app.modalView(search)">
+									<strong class="list-group-item-heading">{{search.title}}</strong>
+									<span class="pull-right">{{search.date | date: "dd MMM yyyy"}}</span>
+									<p class="list-group-item-text">{{search.description | limitTo: app.cfg.searchDescriptionLength}}<span ng-show="search.description.length > app.cfg.searchDescriptionLength">..</span></p>
+								</a>
+							</li>
+						</ul>
+					</div>
 				</div>
 			</div>
-			
+
 			<div class="navbar-form navbar-right">
 				<div class="form-group">
-					<button type="button" class="btn btn-primary" ng-click="app.modalAdd()">Добавить</button>
-					<button type="button" class="btn btn-primary" ng-click="app.fillMonth()">Обновить</button>
+					<button type="button" class="btn btn-primary" ng-click="app.modalAdd()">
+						<i class="glyphicon glyphicon-plus"></i>
+						<span class="hidden-xs hidden-sm">Добавить</span>
+					</button>
+					<button type="button" class="btn btn-primary hidden-xs" ng-click="app.fillMonth()">
+						<i class="glyphicon glyphicon-refresh"></i>
+						<span class="hidden-xs hidden-sm">Обновить</span>
+					</button>
 				</div>
 			</div>
-			
 			
 		</div>
 	</nav>
+	
+	<script type="text/ng-template" id="myPopover.html">
 		
-	<div class="container body">
+    </script>
+		
+	<div class="container-fluid body">
 		<div class="calendar">
-			<div ng-class="{'today': (app.isToday(i)), 'gray': (app.isMonth(i))}" ng-repeat="(i, events) in app.days">
+			<div ng-class="{'today': (app.isToday(i)), 'gray': (app.isMonth(i))}" ng-repeat="i in app.days">
 				<span class="week-day" ng-show="$index<7">{{i | date: 'EEE'}}</span>
 				<span class="day">{{i | date: 'dd'}}</span>
-				<span ng-show="app.isFirst(i)">{{i | date: 'MMM'}}</span>
+				<span ng-show="app.isFirst(i) || $index==0">{{i | date: 'MMM'}}</span>
 				<div class="events">
-					<div ng-class="{'event-full': (!event.time), 'event-time': (event.time)}" ng-repeat="event in events">
-						<span ng-show="event.time">{{event.time}}</span>
-						<strong>{{event.title}}</strong>
+					<div ng-class="{'event-full': (!task.time), 'event-time': (task.time)}" ng-click="app.modalView(task)" ng-repeat="task in app.data.tasks | filter: {date: i}">
+						<span ng-show="task.time">{{task.time | date:'HH:mm'}}</span>
+						<strong>{{task.title}}</strong>
 					</div>
 				</div>
 			</div>

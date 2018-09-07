@@ -1,3 +1,8 @@
+@import "node_modules/bootstrap/less/bootstrap.less";
+@grid-float-breakpoint: 0;
+
+a {cursor: pointer;}
+
 .head-title {
 	color: #757575;
 }
@@ -82,3 +87,32 @@
 	border-radius: 50%;
 	background-color: #039be5;
 }
+
+.dropdown-menu {
+	max-width: 90vw;
+}
+
+.list-group-item-text {
+	overflow: hidden;
+}
+
+@media (max-width: 767px) {
+	.body {
+		height: auto;
+	}
+	.calendar > div {
+		flex-basis: 100%;
+	}
+	.navbar-form {
+		padding-left: 5px;
+		padding-right: 5px;
+	}
+	.navbar-form .form-group {
+		margin-bottom: 0;
+	}
+	.navbar-brand {
+		padding-right: 0;
+	}
+}
+
+

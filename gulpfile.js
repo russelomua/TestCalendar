@@ -4,6 +4,7 @@ var gulp = require('gulp'),
     watch = require('gulp-watch'),
 	concat = require('gulp-concat'),
 	connect = require('gulp-connect'),
+	less = require('gulp-less'),
 	rimraf = require('rimraf');
 
 var path = {
@@ -21,8 +22,7 @@ var path = {
 			"src/js/app.js"
 		],
 		css: [
-			"src/css/app.css",
-			"node_modules/bootstrap/dist/css/bootstrap.css"
+			"src/css/app.css"
 		],
 		lib: [
 			"node_modules/angular/angular.min.js",
@@ -59,6 +59,7 @@ gulp.task('js', function () {
 
 gulp.task('css', function () {
     return gulp.src(path.src.css, {base: path.build.css})
+		.pipe(less())
 		.pipe(concat('app.css'))
         .pipe(gulp.dest(path.build.css))
         .pipe(connect.reload()); //server reload
